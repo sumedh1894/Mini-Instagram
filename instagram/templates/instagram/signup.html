@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="Sumedh_Karande">
+		<title>Instagram-Signup</title>
+
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="{% static 'instagram/style.css' %}" />
+	</head>
+
+	<!-- NAVBAR -->
+
+	<nav class="navbar navbar-inverse navbar-default">
+      	<div class="container">
+        	<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mynav">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+          		<a class="navbar-brand" style="color: white" href="/">Instagram</a>
+        	</div>
+			<div class="collapse navbar-collapse" id="mynav"> 
+				<ul class="nav navbar-nav navbar-right">
+					<li class="nav-item">
+					<a class="nav-link" style="color: white" href="/instagram/login">Login</a>
+					</li>
+				</ul>
+			</div> 
+    	</div>
+	</nav>
+
+	<!-- BODY OF THE SIGNUP PAGE -->
+
+	<div class="container-fluid bg-3 text-center">
+		<h1 class="align-center">Welcome back to Instagram</h1>
+		<h2 class="align-center">It’s free and always will be.</h2><br />
+		<h3 class="align-center">Sign up to see photos and videos from your friends.</h3>
+	</div>
+	<br />
+	{% if error %}
+	<div style="width:150px; margin:0 auto;">
+		<b style="font-size:18px;">{{error}}</b>
+	</div>
+	{% endif %}
+
+	<div style="width:150px; margin:0 auto;">
+		<form action="{% url 'instagram:signup' %}" method="post" style="font-size:15px;">
+			{% csrf_token %}
+			Username:
+			<br />
+			<input type="text" name="username" />
+			Password:
+			<br />
+			<input type="password" name="password1" />
+			Confirm Password:
+			<br />
+			<input type="password" name="password2" />
+			<br />
+			<br />
+			<input class="btn btn-primary" type="submit" value="Sign-up" />
+		</form>
+		<br />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</html>

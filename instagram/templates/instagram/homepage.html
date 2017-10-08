@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="Sumedh_Karande">
+		<title>Instagram</title>
+		
+		<!-- Bootstrap -->
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="{% static 'instagram/style.css' %}" />
+	</head>
+	
+	<!-- If user is Authenticated it shows the user page view irrespective -->
+
+	{% if user.is_authenticated %}
+
+	<!-- NAVBAR -->
+
+		<nav class="navbar navbar-inverse navbar-default">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mynav">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" style="color: white" href="/instagram">Instagram</a>
+				</div>
+				<div class="collapse navbar-collapse" id="mynav"> 
+					<ul class="nav navbar-nav navbar-right">
+						<li class="nav-item">
+						<a class="nav-link" style="color: white" href="/instagram/logout">Logout</a>
+						</li>
+					</ul>
+				</div> 
+			</div>
+		</nav>
+
+		<!-- BODY OF THE USER'S VIEW PAGE -->
+
+		<div align="center">
+			<h2 class="align-center">Welcome to Instagram, {{ username }} !</h2>
+		</div>
+		<br />
+		<div class="container" align="center" style="font-size:20px;">
+			<div class="container well">
+				<form class="form-inline" action="#" method="post" enctype="multipart/form-data">
+					{% csrf_token %} {{form}} <br />
+					<input type="submit"  class="btn btn-info" value="Upload" />
+				</form>
+			</div>
+			<div class="row ">
+				<div class="col-lg-12">
+					<h1 class="page-header center">{{ username }}'s Photos</h1>
+				</div>
+			</div>
+
+
+			{% if uploads %}
+			
+				{% for photo in uploads %}
+					<br />	
+					<div class="col-lg-12 col-md-12 col-xs-12 well">
+						<div class="container-fluid bg-3 text-center">
+							<h3>{{photo.caption}}</h3>
+						</div><br />
+						<img class="img-responsive" height="236" src="media/{{photo.image_field}}" >
+					</div><br />
+					<a href="delete?id={{photo.id}}" class="btn btn-info" onclick="return confirm('Sure about it?');">Delete</a>
+					<input type="button" class="btn btn-info" onclick="var t = prompt('Edit Caption', '{{photo.caption}}'); if (t!= null) window.location.href='edit?id={{photo.id}}&caption='+t " value='Edit Caption'></input><br />						
+				{% endfor %}
+				
+				<div class="pagination">
+					<span class="step-links">
+						{% if uploads.has_previous %}
+							<a href="?page={{ uploads.previous_page_number }}">previous</a>
+						{% endif %}
+
+						<span class="current">
+						<h4>	Page {{ uploads.number }} of {{ uploads.paginator.num_pages }}. </h4>
+						</span>
+
+						{% if uploads.has_next %}
+							<a class="btn btn-primary" href="?page={{ uploads.next_page_number }}">next</a>
+						{% endif %}
+					</span>
+				</div>
+			{% else %}
+				<h3 >You have no Images at the moment!</h3>
+				<h2 >Click to Upload!</h2>
+			
+			{% endif %}
+		</div>
+
+	<!-- If user is not logged in, then the viewer is shown the Viewer page -->
+		
+	{% else %}
+		
+	<!-- BODY OF THE STRICTLY VIEWER'S VIEW -->
+
+
+		<nav class="navbar navbar-inverse navbar-default">
+			<div class="container">
+				<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mynav">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" style="color: white" href="#">Instagram</a>
+				</div>
+				<div class="collapse navbar-collapse" id="mynav"> 
+					<ul class="nav navbar-nav navbar-right">
+						<li class="nav-item">
+							<a class="nav-link" style="color: white" href="/instagram/signup">Sign-up</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" style="color: white" href="/instagram/login">Login</a>
+						</li>
+					</ul>
+				</div> 
+			</div>
+		</nav>
+		<div align="center">
+			<h2 class="align-center">Welcome to Instagram!</h2>
+			<h3 class="align-center">Login to share your memories with your friends</h3>
+		</div><br />
+		<div class="container" align="center" style="font-size:20px;">
+			{% for photo in uploads %}
+				<div class="col-lg-12 col-md-12 col-xs-12 well">
+					<div class="custom-container text-center">
+						<h2>{{photo.caption}}</h2>
+						<h3 class="page-header center">User- {{ photo.user }}</h3>
+					</div>
+					<div class="center " align="center">
+						<img class="img-responsive" width="500" height= "236" src="media/{{photo.image_field}}" alt="">	
+					</div>
+				</div>
+			{% endfor %}
+			
+			<div class="col-lg-12 col-md-12 col-xs-12">
+				<div class="pagination">
+					<span class="step-links">
+						{% if uploads.has_previous %}
+							<a href="?page={{ uploads.previous_page_number }}">previous</a>
+						{% endif %}
+
+						<span class="current">
+						<h4>   Page {{ uploads.number }} of {{ uploads.paginator.num_pages }}. </h4>
+						</span>
+
+						{% if uploads.has_next %}
+							<a class="btn btn-primary" href="?page={{ uploads.next_page_number }}">next</a>
+						{% endif %}
+					</span>
+				</div> 
+			</div>
+		</div>
+	{% endif %} 
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</html>
